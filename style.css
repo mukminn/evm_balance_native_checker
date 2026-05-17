@@ -10,8 +10,8 @@ html, body {
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0a0a14;
-    color: #e0e0e0;
+    background: #ffffff;
+    color: #1a1a1a;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -19,28 +19,24 @@ body {
 
 /* ------------------ Header ------------------ */
 .header {
-    background: linear-gradient(135deg, #12122a 0%, #1a1633 100%);
+    background: #ffffff;
     padding: 20px 16px 16px;
-    border-bottom: 1px solid #262640;
+    border-bottom: 1px solid #e5e7eb;
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(10px);
 }
 
 .header h1 {
     font-size: 1.6rem;
     text-align: center;
-    background: linear-gradient(90deg, #00d2ff, #b14eff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #111827;
     margin-bottom: 4px;
     font-weight: 700;
 }
 
 .subtitle {
-    color: #777;
+    color: #6b7280;
     text-align: center;
     margin-bottom: 14px;
     font-size: 0.85rem;
@@ -58,10 +54,10 @@ body {
     padding: 11px 16px;
     width: 440px;
     max-width: 90vw;
-    border: 1px solid #2a2a44;
+    border: 1px solid #d1d5db;
     border-radius: 8px;
-    background: #15152a;
-    color: #fff;
+    background: #ffffff;
+    color: #111827;
     font-size: 0.9rem;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -69,26 +65,24 @@ body {
 }
 
 .input-section input:focus {
-    border-color: #7b2ff7;
-    box-shadow: 0 0 0 3px rgba(123, 47, 247, 0.15);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .input-section button {
     padding: 11px 24px;
-    border: none;
+    border: 1px solid #111827;
     border-radius: 8px;
-    background: linear-gradient(135deg, #7b2ff7, #00d2ff);
-    color: white;
+    background: #111827;
+    color: #ffffff;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 14px rgba(123, 47, 247, 0.3);
+    transition: transform 0.15s, opacity 0.2s, background 0.2s;
 }
 
 .input-section button:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(123, 47, 247, 0.45);
+    background: #000000;
 }
 
 .input-section button:disabled {
@@ -105,12 +99,12 @@ body {
 }
 
 .stats span {
-    background: #15152a;
+    background: #f3f4f6;
     padding: 5px 12px;
     border-radius: 16px;
     font-size: 0.78rem;
-    border: 1px solid #2a2a44;
-    color: #aaa;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
 }
 
 .filters {
@@ -124,7 +118,7 @@ body {
 
 .filters label {
     font-size: 0.8rem;
-    color: #999;
+    color: #4b5563;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -133,31 +127,31 @@ body {
 }
 
 .filters input[type="checkbox"] {
-    accent-color: #7b2ff7;
+    accent-color: #2563eb;
     cursor: pointer;
 }
 
 .filters input[type="text"] {
     padding: 7px 12px;
-    border: 1px solid #2a2a44;
+    border: 1px solid #d1d5db;
     border-radius: 6px;
-    background: #15152a;
-    color: #fff;
+    background: #ffffff;
+    color: #111827;
     font-size: 0.8rem;
     outline: none;
     width: 200px;
 }
 
 .filters input[type="text"]:focus {
-    border-color: #7b2ff7;
+    border-color: #2563eb;
 }
 
 .retry-btn {
     padding: 7px 14px;
-    border: 1px solid #2a2a44;
+    border: 1px solid #d1d5db;
     border-radius: 6px;
-    background: #15152a;
-    color: #d4a5ff;
+    background: #ffffff;
+    color: #374151;
     font-size: 0.78rem;
     cursor: pointer;
     transition: all 0.15s;
@@ -165,9 +159,9 @@ body {
 }
 
 .retry-btn:hover:not(:disabled) {
-    border-color: #7b2ff7;
-    background: #1f1535;
-    color: #fff;
+    border-color: #111827;
+    background: #f9fafb;
+    color: #111827;
 }
 
 .retry-btn:disabled {
@@ -179,17 +173,17 @@ body {
     width: 100%;
     max-width: 600px;
     margin: 8px auto 0;
-    background: #15152a;
+    background: #f3f4f6;
     border-radius: 8px;
     height: 22px;
     position: relative;
     overflow: hidden;
-    border: 1px solid #2a2a44;
+    border: 1px solid #e5e7eb;
 }
 
 .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #7b2ff7, #00d2ff);
+    background: #111827;
     border-radius: 8px;
     transition: width 0.3s ease;
     width: 0%;
@@ -202,8 +196,9 @@ body {
     transform: translate(-50%, -50%);
     font-size: 0.75rem;
     font-weight: 600;
-    color: #fff;
-    text-shadow: 0 0 4px rgba(0,0,0,0.8);
+    color: #111827;
+    mix-blend-mode: difference;
+    filter: invert(1);
 }
 
 /* ------------------ Container ------------------ */
@@ -218,6 +213,7 @@ body {
     padding: 16px;
     overflow-y: auto;
     max-height: calc(100vh - 220px);
+    background: #ffffff;
 }
 
 .panel h2 {
@@ -234,24 +230,24 @@ body {
 }
 
 .mainnet-panel {
-    background: #0c1a1a;
-    border-right: 1px solid #262640;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
 }
 
 .mainnet-panel h2 {
-    background: linear-gradient(135deg, #1b4332, #2d6a4f);
-    color: #95d5b2;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    background: #f9fafb;
+    color: #111827;
+    border: 1px solid #e5e7eb;
 }
 
 .testnet-panel {
-    background: #1a0d20;
+    background: #ffffff;
 }
 
 .testnet-panel h2 {
-    background: linear-gradient(135deg, #4a1942, #6b2fa0);
-    color: #d4a5ff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    background: #f9fafb;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
 }
 
 .chain-list {
@@ -262,52 +258,53 @@ body {
 
 .placeholder {
     text-align: center;
-    color: #555;
+    color: #9ca3af;
     padding: 30px 16px;
     font-style: italic;
     font-size: 0.85rem;
 }
 
 .error-placeholder {
-    color: #ff5555;
+    color: #dc2626;
 }
 
 /* ------------------ Chain Card ------------------ */
 .chain-card {
-    background: #15152a;
-    border: 1px solid #262640;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.15s, border-color 0.2s, background 0.2s;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     gap: 10px;
 }
 
 .chain-card:hover {
-    border-color: #4a4a6e;
-    background: #1a1a32;
+    border-color: #d1d5db;
+    background: #f9fafb;
 }
 
 .chain-card.has-balance {
-    border-color: #2d6a4f;
-    background: linear-gradient(135deg, #15152a, #163025);
-    box-shadow: 0 0 0 1px rgba(45, 106, 79, 0.3), 0 2px 8px rgba(45, 106, 79, 0.15);
+    border-color: #111827;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px #111827, 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .chain-card.has-balance:hover {
-    border-color: #40916c;
+    background: #f9fafb;
 }
 
 .chain-card.error {
-    opacity: 0.45;
-    border-color: #3a1818;
+    opacity: 0.5;
+    border-color: #fecaca;
+    background: #fef2f2;
 }
 
 .chain-card.checking {
     opacity: 0.75;
-    border-color: #4a4a6e;
+    border-color: #d1d5db;
 }
 
 .chain-card.idle {
@@ -325,7 +322,7 @@ body {
 .chain-name {
     font-weight: 600;
     font-size: 0.88rem;
-    color: #e0e0e0;
+    color: #111827;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -333,23 +330,23 @@ body {
 
 .chain-details {
     font-size: 0.7rem;
-    color: #666;
+    color: #6b7280;
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
 .chain-id-badge {
-    background: #1f1f3a;
+    background: #f3f4f6;
     padding: 1px 7px;
     border-radius: 3px;
     font-size: 0.65rem;
-    color: #888;
+    color: #4b5563;
     font-family: 'SF Mono', monospace;
 }
 
 .chain-symbol-text {
-    color: #999;
+    color: #6b7280;
     font-weight: 500;
 }
 
@@ -362,37 +359,37 @@ body {
 .balance-value {
     font-weight: 700;
     font-size: 0.95rem;
-    color: #00d2ff;
+    color: #111827;
     font-family: 'SF Mono', monospace;
     display: block;
 }
 
 .balance-value.zero {
-    color: #555;
+    color: #9ca3af;
     font-size: 0.85rem;
     font-weight: 500;
 }
 
 .balance-value.idle {
-    color: #444;
+    color: #d1d5db;
     font-size: 0.95rem;
 }
 
 .balance-value.error-text {
-    color: #ff6b6b;
+    color: #dc2626;
     font-size: 0.7rem;
     font-weight: 500;
 }
 
 .balance-value.loading {
-    color: #888;
+    color: #6b7280;
     font-size: 0.75rem;
     font-weight: 500;
 }
 
 .balance-symbol {
     font-size: 0.65rem;
-    color: #777;
+    color: #6b7280;
     margin-top: 1px;
     font-weight: 500;
 }
@@ -410,14 +407,14 @@ body {
 .footer {
     text-align: center;
     padding: 12px;
-    color: #555;
+    color: #9ca3af;
     font-size: 0.75rem;
-    border-top: 1px solid #262640;
-    background: #0a0a14;
+    border-top: 1px solid #e5e7eb;
+    background: #ffffff;
 }
 
 .footer a {
-    color: #7b2ff7;
+    color: #2563eb;
     text-decoration: none;
 }
 
@@ -432,7 +429,7 @@ body {
     }
     .mainnet-panel {
         border-right: none;
-        border-bottom: 1px solid #262640;
+        border-bottom: 1px solid #e5e7eb;
     }
     .panel {
         max-height: none;
@@ -457,12 +454,12 @@ body {
     width: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: #0a0a14;
+    background: #f9fafb;
 }
 ::-webkit-scrollbar-thumb {
-    background: #2a2a44;
+    background: #d1d5db;
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #3a3a5a;
+    background: #9ca3af;
 }
