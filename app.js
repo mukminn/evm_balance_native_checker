@@ -225,16 +225,21 @@ function updateStats() {
 // Balance checking
 // ----------------------------------------------------------------------------
 
+// Race multiple RPCs in parallel — first to respond wins
 async function checkBalance(chain, address) {
-    const rpcs = getUsableRPCs(chain);
+    const rpcs = getUsableRPCs(chain).slice(0, 5);
     const symbol = chain.nativeCurrency?.symbol || '???';
     const decimals = chain.nativeCurrency?.decimals ?? 18;
 
-    // Try up to 4 RPCs per chain
-    for (const rpc of rpcs.slice(0, 4)) {
+    if (rpcs.length === 0) return { balance: null, error: true, symbol };
+
+    const tryRpc = (rpc) => new Promise(async (resolve, reject) => {
         try {
             const ctrl = new AbortController();
-            const t = setTimeout(() => ctrl.abort(), 6000);
+            const t = setTimeout(() => {
+                ctrl.abort();
+                reject(new Error('timeout'));
+            }, 3500);
 
             const res = await fetch(rpc, {
                 method: 'POST',
@@ -249,17 +254,21 @@ async function checkBalance(chain, address) {
             });
             clearTimeout(t);
 
-            if (!res.ok) continue;
+            if (!res.ok) return reject(new Error('http ' + res.status));
             const data = await res.json();
-            if (data?.result) {
-                const wei = BigInt(data.result);
-                return { balance: formatBalance(wei, decimals), error: null, symbol };
-            }
-        } catch (_) {
-            // try next rpc
+            if (!data?.result) return reject(new Error('no result'));
+            resolve(BigInt(data.result));
+        } catch (e) {
+            reject(e);
         }
+    });
+
+    try {
+        const wei = await Promise.any(rpcs.map(tryRpc));
+        return { balance: formatBalance(wei, decimals), error: null, symbol };
+    } catch (_) {
+        return { balance: null, error: true, symbol };
     }
-    return { balance: null, error: true, symbol };
 }
 
 async function checkAllBalances() {
@@ -286,23 +295,26 @@ async function checkAllBalances() {
 
     const all = [...mainnetChains, ...testnetChains];
     const total = all.length;
-    const batchSize = 25;
 
-    for (let i = 0; i < all.length; i += batchSize) {
-        const batch = all.slice(i, i + batchSize);
-
-        // mark batch as checking
-        for (const chain of batch) {
-            const card = document.getElementById(`chain-${chain.chainId}`);
-            if (card) {
-                card.classList.remove('pending');
-                card.classList.add('checking');
-                const v = card.querySelector('.balance-value');
-                if (v) v.textContent = 'Checking…';
-            }
+    // Mark all as checking up front
+    for (const chain of all) {
+        const card = document.getElementById(`chain-${chain.chainId}`);
+        if (card) {
+            card.classList.remove('pending');
+            card.classList.add('checking');
+            const v = card.querySelector('.balance-value');
+            if (v) v.textContent = '…';
         }
+    }
 
-        await Promise.all(batch.map(async chain => {
+    // High-concurrency worker pool
+    const CONCURRENCY = 60;
+    let cursor = 0;
+
+    const worker = async () => {
+        while (cursor < all.length) {
+            const idx = cursor++;
+            const chain = all[idx];
             const r = await checkBalance(chain, address);
             totalChecked++;
             if (r.balance && r.balance !== '0') totalWithBalance++;
@@ -312,8 +324,10 @@ async function checkAllBalances() {
             progressBar.style.width = `${pct}%`;
             progressText.textContent = `${pct}% (${totalChecked}/${total})`;
             updateStats();
-        }));
-    }
+        }
+    };
+
+    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
     isChecking = false;
     checkBtn.disabled = false;
