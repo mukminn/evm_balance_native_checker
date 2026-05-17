@@ -3,53 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EVM Native Balance Checker - All Chains</title>
+    <title>EVM Native Balance Checker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="header">
+    <header class="header">
         <h1>EVM Native Token Balance Checker</h1>
-        <p class="subtitle">Check your native token balance across all EVM chains</p>
+        <p class="subtitle">Check native token balance across all EVM chains from chainlist.org</p>
+
         <div class="input-section">
-            <input type="text" id="walletAddress" placeholder="Enter EVM wallet address (0x...)" />
-            <button id="checkBtn" onclick="checkAllBalances()">Check Balances</button>
+            <input
+                type="text"
+                id="walletAddress"
+                placeholder="0x... (your EVM wallet address)"
+                autocomplete="off"
+                spellcheck="false"
+            />
+            <button id="checkBtn">Check Balances</button>
         </div>
-        <div class="stats" id="stats">
+
+        <div class="stats">
             <span id="mainnetCount">Mainnets: 0</span>
             <span id="testnetCount">Testnets: 0</span>
             <span id="checkedCount">Checked: 0</span>
             <span id="withBalance">With Balance: 0</span>
         </div>
+
         <div class="filters">
-            <label><input type="checkbox" id="hideZero" onchange="applyFilters()"> Hide Zero Balance</label>
-            <label><input type="checkbox" id="hideErrors" onchange="applyFilters()" checked> Hide Errors</label>
-            <input type="text" id="searchChain" placeholder="Search chain name..." oninput="applyFilters()" />
+            <label><input type="checkbox" id="hideZero"> Hide zero</label>
+            <label><input type="checkbox" id="hideErrors" checked> Hide errors</label>
+            <input type="text" id="searchChain" placeholder="Search chain name..." />
         </div>
+
         <div class="progress-container" id="progressContainer" style="display:none;">
             <div class="progress-bar" id="progressBar"></div>
             <span class="progress-text" id="progressText">0%</span>
         </div>
-    </div>
+    </header>
 
-    <div class="container">
-        <div class="panel mainnet-panel">
+    <main class="container">
+        <section class="panel mainnet-panel">
             <h2>MAINNET</h2>
             <div class="chain-list" id="mainnetList">
-                <div class="placeholder">Enter address and click "Check Balances" to start</div>
+                <div class="placeholder">Loading chains...</div>
             </div>
-        </div>
-        <div class="panel testnet-panel">
+        </section>
+        <section class="panel testnet-panel">
             <h2>TESTNET</h2>
             <div class="chain-list" id="testnetList">
-                <div class="placeholder">Enter address and click "Check Balances" to start</div>
+                <div class="placeholder">Loading chains...</div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <div class="footer">
-        <p>Data sourced from <a href="https://chainlist.org" target="_blank">chainlist.org</a> | 
-        Chain data from <a href="https://github.com/ethereum-lists/chains" target="_blank">ethereum-lists/chains</a></p>
-    </div>
+    <footer class="footer">
+        Data: <a href="https://chainid.network/chains.json" target="_blank">chainid.network</a> &middot;
+        Source: <a href="https://github.com/ethereum-lists/chains" target="_blank">ethereum-lists/chains</a>
+    </footer>
 
     <script src="app.js"></script>
 </body>
