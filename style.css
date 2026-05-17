@@ -152,6 +152,29 @@ body {
     border-color: #7b2ff7;
 }
 
+.retry-btn {
+    padding: 7px 14px;
+    border: 1px solid #2a2a44;
+    border-radius: 6px;
+    background: #15152a;
+    color: #d4a5ff;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+}
+
+.retry-btn:hover:not(:disabled) {
+    border-color: #7b2ff7;
+    background: #1f1535;
+    color: #fff;
+}
+
+.retry-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 .progress-container {
     width: 100%;
     max-width: 600px;
