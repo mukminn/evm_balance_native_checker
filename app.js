@@ -149,20 +149,9 @@ function formatBalance(weiBigInt, decimals) {
     return rem === '' ? intPart.toString() : `${intPart}.${rem}`;
 }
 
-// Display the balance as-is for normal values.
-// Only abbreviate when the number is genuinely absurd (broken chains / no-native-currency garbage).
+// Show balance exactly as returned from formatBalance (already trimmed to 6 decimals).
 function shortBalance(balanceStr) {
-    if (!balanceStr) return balanceStr;
-
-    // For absurd values (>= 1 quadrillion), abbreviate to avoid breaking the layout
-    const num = Number(balanceStr);
-    if (isFinite(num) && Math.abs(num) >= 1e15) {
-        if (Math.abs(num) >= 1e18) return num.toExponential(2);
-        if (Math.abs(num) >= 1e15) return (num / 1e15).toFixed(2).replace(/\.?0+$/, '') + 'Q';
-    }
-
-    // Otherwise, return the value as-is (already trimmed to up to 6 decimals in formatBalance)
-    return balanceStr;
+    return balanceStr || '';
 }
 
 // Build explorer URL for an address on a given chain.
