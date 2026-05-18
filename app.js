@@ -149,16 +149,51 @@ function formatBalance(weiBigInt, decimals) {
     return rem === '' ? intPart.toString() : `${intPart}.${rem}`;
 }
 
+// Format a numeric string into a human-readable balance.
+// Handles huge numbers (millions, billions, trillions) with abbreviation,
+// and small numbers with proper decimal precision. No misleading truncation.
 function shortBalance(balanceStr) {
-    // Truncate long numbers for display
     if (!balanceStr) return balanceStr;
-    if (balanceStr.length > 12) {
-        const dot = balanceStr.indexOf('.');
-        if (dot > 0 && dot < 10) {
-            return balanceStr.slice(0, 10);
-        }
+    const num = Number(balanceStr);
+    if (!isFinite(num)) return balanceStr;
+    if (num === 0) return '0';
+
+    const abs = Math.abs(num);
+    const trimZeros = (s) => s.replace(/\.?0+$/, '');
+
+    // Absurdly large — use scientific notation
+    if (abs >= 1e18) return num.toExponential(2);
+
+    // Large numbers — use abbreviation
+    if (abs >= 1e15) return trimZeros((num / 1e15).toFixed(2)) + 'Q';
+    if (abs >= 1e12) return trimZeros((num / 1e12).toFixed(2)) + 'T';
+    if (abs >= 1e9)  return trimZeros((num / 1e9).toFixed(2))  + 'B';
+    if (abs >= 1e6)  return trimZeros((num / 1e6).toFixed(2))  + 'M';
+
+    // Medium numbers — commas + sensible decimals
+    if (abs >= 1000) {
+        const [int, dec = ''] = num.toFixed(2).split('.');
+        const withCommas = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return dec ? trimZeros(`${withCommas}.${dec}`) : withCommas;
     }
-    return balanceStr;
+    if (abs >= 1)      return trimZeros(num.toFixed(4));
+    if (abs >= 0.0001) return trimZeros(num.toFixed(6));
+
+    // Tiny numbers — scientific notation
+    return num.toExponential(2);
+}
+
+// Build explorer URL for an address on a given chain.
+// Returns null if the chain has no explorer.
+function explorerUrlFor(chain, address) {
+    if (!chain.explorers || chain.explorers.length === 0) return null;
+    const explorer = chain.explorers.find(e => e.url) || chain.explorers[0];
+    if (!explorer || !explorer.url) return null;
+    const base = explorer.url.replace(/\/+$/, '');
+    if (address && /^0x[a-fA-F0-9]{40}$/.test(address)) {
+        return `${base}/address/${address}`;
+    }
+    return base;
 }
 
 // ----------------------------------------------------------------------------
@@ -175,6 +210,10 @@ async function fetchChains() {
         testnetChains = [];
 
         for (const chain of allChains) {
+            // Skip chains that explicitly have no native currency — they return garbage balances
+            const ncName = chain.nativeCurrency?.name?.toLowerCase() || '';
+            if (ncName.includes('no native currency') || ncName.includes('no native')) continue;
+
             const rpcs = getUsableRPCs(chain);
             if (rpcs.length === 0) continue;
             if (isTestnet(chain)) testnetChains.push(chain);
@@ -215,6 +254,7 @@ function createChainCard(chain, status = 'idle') {
     card.dataset.name = chain.name.toLowerCase();
 
     const symbol = chain.nativeCurrency ? chain.nativeCurrency.symbol : '???';
+    const explorerUrl = explorerUrlFor(chain, currentAddress);
 
     let balanceHTML;
     if (status === 'idle') {
@@ -225,12 +265,17 @@ function createChainCard(chain, status = 'idle') {
         balanceHTML = `<span class="balance-value loading">…</span>`;
     }
 
+    const explorerLink = explorerUrl
+        ? `<a class="explorer-link" href="${explorerUrl}" target="_blank" rel="noopener" title="Open in explorer">↗</a>`
+        : '';
+
     card.innerHTML = `
         <div class="chain-info">
             <div class="chain-name" title="${chain.name}">${chain.name}</div>
             <div class="chain-details">
                 <span class="chain-id-badge">#${chain.chainId}</span>
                 <span class="chain-symbol-text">${symbol}</span>
+                ${explorerLink}
             </div>
         </div>
         <div class="balance-info">${balanceHTML}</div>
