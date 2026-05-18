@@ -149,38 +149,20 @@ function formatBalance(weiBigInt, decimals) {
     return rem === '' ? intPart.toString() : `${intPart}.${rem}`;
 }
 
-// Format a numeric string into a human-readable balance.
-// Handles huge numbers (millions, billions, trillions) with abbreviation,
-// and small numbers with proper decimal precision. No misleading truncation.
+// Display the balance as-is for normal values.
+// Only abbreviate when the number is genuinely absurd (broken chains / no-native-currency garbage).
 function shortBalance(balanceStr) {
     if (!balanceStr) return balanceStr;
+
+    // For absurd values (>= 1 quadrillion), abbreviate to avoid breaking the layout
     const num = Number(balanceStr);
-    if (!isFinite(num)) return balanceStr;
-    if (num === 0) return '0';
-
-    const abs = Math.abs(num);
-    const trimZeros = (s) => s.replace(/\.?0+$/, '');
-
-    // Absurdly large — use scientific notation
-    if (abs >= 1e18) return num.toExponential(2);
-
-    // Large numbers — use abbreviation
-    if (abs >= 1e15) return trimZeros((num / 1e15).toFixed(2)) + 'Q';
-    if (abs >= 1e12) return trimZeros((num / 1e12).toFixed(2)) + 'T';
-    if (abs >= 1e9)  return trimZeros((num / 1e9).toFixed(2))  + 'B';
-    if (abs >= 1e6)  return trimZeros((num / 1e6).toFixed(2))  + 'M';
-
-    // Medium numbers — commas + sensible decimals
-    if (abs >= 1000) {
-        const [int, dec = ''] = num.toFixed(2).split('.');
-        const withCommas = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return dec ? trimZeros(`${withCommas}.${dec}`) : withCommas;
+    if (isFinite(num) && Math.abs(num) >= 1e15) {
+        if (Math.abs(num) >= 1e18) return num.toExponential(2);
+        if (Math.abs(num) >= 1e15) return (num / 1e15).toFixed(2).replace(/\.?0+$/, '') + 'Q';
     }
-    if (abs >= 1)      return trimZeros(num.toFixed(4));
-    if (abs >= 0.0001) return trimZeros(num.toFixed(6));
 
-    // Tiny numbers — scientific notation
-    return num.toExponential(2);
+    // Otherwise, return the value as-is (already trimmed to up to 6 decimals in formatBalance)
+    return balanceStr;
 }
 
 // Build explorer URL for an address on a given chain.
